@@ -6,7 +6,8 @@ It kicks players out of the channel every 60 seconds who do not have video kamme
 - Rename .env.example to .env
 - Change the Settings inside .env
 - Start with `python3 app.py`
+- Change the Messages. (This is mainly German)
 
 
 # Demonstration
-[Youtube Video](https://youtu.be/03jxCNseuJ8)
+German and outdated Video: [Youtube Video](https://youtu.be/03jxCNseuJ8)
