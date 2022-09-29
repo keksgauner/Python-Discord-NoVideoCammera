@@ -48,7 +48,7 @@ async def check_voice_channel_task(channel):
                 #await member.edit(voice_channel=None)
                 await member.move_to(None)
 
-        await asyncio.sleep(20)
+        await asyncio.sleep(60)
 
 # status for fun
 async def status_task():
