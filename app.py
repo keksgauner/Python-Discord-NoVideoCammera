@@ -92,6 +92,7 @@ async def status_task():
 # ready info
 @client.event
 async def on_ready():
+    print("-------------------")
     print(f"Logged in as {client.user.name}")
     print(f"discord.py API version: {discord.__version__}")
     print(f"Python version: {platform.python_version()}")
