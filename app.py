@@ -1,15 +1,16 @@
 # selfVideo.py
+
+# default modules
 import os
+import platform
 
 # idk auto install stuff
-os.system('python -m pip install python-dotenv --quiet')
-os.system('python -m pip install discord --quiet')
-os.system('python -m pip install asyncio --quiet')
+os.system('python -m pip install -r requirements.txt')
 
 from dotenv import load_dotenv
 
-# discord.py
-import discord
+# Import Third-party software party software like discord.py
+import discord  # Import the original discord.py module
 import asyncio
 
 # .env
@@ -66,9 +67,15 @@ async def status_task():
 # ready info
 @client.event
 async def on_ready():
+    print(f"Logged in as {client.user.name}")
+    print(f"discord.py API version: {discord.__version__}")
+    print(f"Python version: {platform.python_version()}")
+    print(f"Running on: {platform.system()} {platform.release()} ({os.name})")
+    print("-------------------")
+
     guild = client.get_guild(GUILD)
     channel = guild.get_channel(CHANNEL)
-    afk_channel = client.get_channel(AFKCHANNEL)
+    afk_channel = guild.get_channel(AFKCHANNEL)
 
     client.loop.create_task(check_voice_channel_task(channel, afk_channel))
     client.loop.create_task(status_task())

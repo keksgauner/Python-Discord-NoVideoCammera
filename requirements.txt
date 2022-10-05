@@ -1,0 +1,4 @@
+# All thinks what the bot need
+python-dotenv
+discord
+asyncio
