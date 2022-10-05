@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 # Import Third-party software party software like discord.py
 import discord  # Import the original discord.py module
+from discord.ext import commands
 import asyncio
 
 # .env
@@ -20,14 +21,13 @@ GUILD = int(os.getenv('DISCORD_GUILD'))
 CHANNEL = int(os.getenv('CHANNEL'))
 AFKCHANNEL = int(os.getenv('AFKCHANNEL'))
 
-
 # bot intents
 intents = discord.Intents.default()
 intents.members = True
 intents.voice_states = True
 
 # command_prefix not in use
-client = discord.Client(intents=intents)
+client = commands.Bot(command_prefix=".", intents=discord.Intents.all())
 
 # check if all members have video on
 async def check_voice_channel_task(channel, afk_channel):
@@ -51,6 +51,31 @@ async def check_voice_channel_task(channel, afk_channel):
                 await member.move_to(afk_channel)
 
         await asyncio.sleep(60)
+        
+@client.slash_command(
+    name='nomotion', 
+    description="Zum Beispiel, wenn ein Mitglied nur Schwarzbild auf der Videokamera hat.",
+    guild_ids=[GUILD]
+    )
+@commands.has_permissions(move_members=True)
+async def nomotion(context: commands.context, member: discord.Member):
+    print(f'Forced to move member {member.name} to AFK channel')
+    
+    guild = client.get_guild(GUILD)
+    channel = guild.get_channel(CHANNEL)
+    afk_channel = guild.get_channel(AFKCHANNEL)
+
+    if member.voice.channel == channel:
+        embed = discord.Embed(
+            title="Hey! Bist du noch da?", 
+            description="Bitte zeige dich mal um nicht rausgeworfen zu werden",
+            color=0x207d96
+        )
+        await member.send(embed=embed)
+        await member.move_to(afk_channel)
+        await context.respond(f'Der {member.name} wurde gewaltsam entfernt!')
+    else:
+        await context.respond(f'Was wurde mit dem {member.name} versucht?')
 
 # status for fun
 async def status_task():
@@ -80,4 +105,5 @@ async def on_ready():
     client.loop.create_task(check_voice_channel_task(channel, afk_channel))
     client.loop.create_task(status_task())
 
-client.run(TOKEN)
+if __name__ == "__main__":
+    client.run(TOKEN)
