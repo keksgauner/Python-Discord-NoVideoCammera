@@ -5,7 +5,7 @@ import os
 import platform
 
 # idk auto install stuff
-os.system('python -m pip install -r requirements.txt')
+#os.system('python -m pip install -r requirements.txt')
 
 from dotenv import load_dotenv
 
@@ -29,8 +29,9 @@ intents.voice_states = True
 # command_prefix not in use
 client = commands.Bot(command_prefix=".", intents=discord.Intents.all())
 
-# check if all members have video on
+
 async def check_voice_channel_task(channel, afk_channel):
+    """check if all members have video on"""
     print(f'Checking voice channel... Name: {channel.name}')
     while True:
         for member in channel.members:
@@ -47,11 +48,12 @@ async def check_voice_channel_task(channel, afk_channel):
                     color=0x207d96
                     )
                 await member.send(embed=embed)
-                #await member.edit(voice_channel=None)
+                # await member.edit(voice_channel=None)
                 await member.move_to(afk_channel)
 
         await asyncio.sleep(60)
-        
+
+
 @client.slash_command(
     name='nomotion', 
     description="Zum Beispiel, wenn ein Mitglied nur Schwarzbild auf der Videokamera hat.",
@@ -77,8 +79,9 @@ async def nomotion(context: commands.context, member: discord.Member):
     else:
         await context.respond(f'Was wurde mit dem {member.name} versucht?')
 
-# status for fun
+
 async def status_task():
+    """status for fun"""
     while True:
         await client.change_presence(activity=discord.Game(name='How to disconnect member FAST'))
         await asyncio.sleep(120)
@@ -89,9 +92,10 @@ async def status_task():
         await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='to member without video'))
         await asyncio.sleep(120)
 
-# ready info
+
 @client.event
 async def on_ready():
+    """ready info"""
     print("-------------------")
     print(f"Logged in as {client.user.name}")
     print(f"discord.py API version: {discord.__version__}")
@@ -105,6 +109,7 @@ async def on_ready():
 
     client.loop.create_task(check_voice_channel_task(channel, afk_channel))
     client.loop.create_task(status_task())
+
 
 if __name__ == "__main__":
     client.run(TOKEN)
